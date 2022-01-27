@@ -40,8 +40,36 @@ const Area = styled.div<IAreaProps>`
 
 const Form = styled.form`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   input {
-    width: 100%;
+    width: 95%;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border: none;
+    padding: 3px 10px;
+
+    &:focus {
+      outline: none;
+      border: 3px solid ${(props) => props.theme.bgColor};
+    }
+  }
+  button {
+    width: 95%;
+    background-color: ${(props) => props.theme.bgColor};
+    border: none;
+    padding: 3px;
+    border-radius: 5px;
+    color: #dfe6e9;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    &:hover {
+      background-color: white;
+      color: ${(props) => props.theme.bgColor};
+      transition: background-color 0.3s ease-in-out;
+    }
   }
 `;
 
@@ -79,6 +107,7 @@ function Board({ toDos, boardId }: IBoardProps) {
           type="text"
           placeholder={`Add task on ${boardId}`}
         />
+        <button>Add</button>
       </Form>
       <Droppable droppableId={boardId}>
         {(magic, snapshot) => (

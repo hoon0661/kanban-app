@@ -9,6 +9,8 @@ import styled from "styled-components";
 import { toDoState } from "./atoms";
 import Board from "./components/Board";
 import DraggableCard from "./components/DraggableCard";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 const Wrapper = styled.div`
   display: flex;
@@ -27,8 +29,31 @@ const Boards = styled.div`
   grid-template-columns: repeat(3, 1fr);
 `;
 
+const Footer = styled.div`
+  font-size: 50px;
+  color: black;
+`;
+
+interface IAreaProps {
+  isDraggingFromThis: boolean;
+  isDraggingOver: boolean;
+}
+
+const Area = styled.div<IAreaProps>`
+  background-color: ${(props) =>
+    props.isDraggingOver
+      ? "#dfe6e9"
+      : props.isDraggingFromThis
+      ? "#b2bec3"
+      : "transparent"};
+  flex-grow: 1;
+  transition: background-color 0.3s ease-in-out;
+  padding: 20px;
+`;
+
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
+
   const onDragEnd = (info: DropResult) => {
     const { destination, draggableId, source } = info;
     if (!destination) return;
@@ -68,6 +93,7 @@ function App() {
           ))}
         </Boards>
       </Wrapper>
+      <Footer />
     </DragDropContext>
   );
 }
