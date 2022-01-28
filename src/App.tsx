@@ -23,7 +23,7 @@ const Boards = styled.div`
   height: 80%;
   overflow-y: auto;
   gap: 10px;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   @media screen and (max-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);
   }
