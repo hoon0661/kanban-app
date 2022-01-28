@@ -11,6 +11,7 @@ import Board from "./components/Board";
 import DraggableCard from "./components/DraggableCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import Trash from "./components/Trash";
 
 const Wrapper = styled.div`
   display: flex;
@@ -19,7 +20,7 @@ const Wrapper = styled.div`
   margin: 0 auto;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 90vh;
 `;
 
 const Boards = styled.div`
@@ -57,6 +58,16 @@ function App() {
   const onDragEnd = (info: DropResult) => {
     const { destination, draggableId, source } = info;
     if (!destination) return;
+    if (destination.droppableId === "trash") {
+      setToDos((allBoards) => {
+        const sourceBoard = [...allBoards[source.droppableId]];
+        sourceBoard.splice(source.index, 1);
+        return {
+          ...allBoards,
+          [source.droppableId]: sourceBoard,
+        };
+      });
+    }
     if (destination.droppableId === source.droppableId) {
       setToDos((allBoards) => {
         const boardCopy = [...allBoards[source.droppableId]];
@@ -84,6 +95,7 @@ function App() {
       });
     }
   };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
@@ -93,7 +105,7 @@ function App() {
           ))}
         </Boards>
       </Wrapper>
-      <Footer />
+      <Trash />
     </DragDropContext>
   );
 }
