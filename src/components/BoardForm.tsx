@@ -38,7 +38,7 @@ function BoardForm() {
   const [todos, setTodos] = useRecoilState(toDoState);
   const { register, setValue, handleSubmit } = useForm<IForm>();
   const onValid = ({ board }: IForm) => {
-    const newData = { [board]: [], ...todos };
+    const newData = { ...todos, [board]: [] };
     setTodos(newData);
     setValue("board", "");
   };
