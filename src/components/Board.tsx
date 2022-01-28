@@ -1,6 +1,9 @@
+import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { useForm } from "react-hook-form";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { ITodo, toDoState } from "../atoms";
 import DraggableCard from "./DraggableCard";
@@ -19,6 +22,14 @@ const Title = styled.h2`
   font-weight: 600;
   margin-bottom: 20px;
   font-size: 18px;
+
+  span {
+    color: ${(props) => props.theme.bgColor};
+    cursor: pointer;
+    position: relative;
+    float: right;
+    padding-right: 10px;
+  }
 `;
 
 interface IAreaProps {
@@ -44,15 +55,15 @@ const Form = styled.form`
   flex-direction: column;
   align-items: center;
   input {
-    width: 95%;
+    width: 80%;
     margin-bottom: 5px;
-    border-radius: 5px;
     border: none;
+    border-bottom: 3px solid ${(props) => props.theme.bgColor};
+    background-color: transparent;
     padding: 3px 10px;
 
     &:focus {
       outline: none;
-      border: 3px solid ${(props) => props.theme.bgColor};
     }
   }
   button {
@@ -83,7 +94,7 @@ interface IForm {
 }
 
 function Board({ toDos, boardId }: IBoardProps) {
-  const setTodos = useSetRecoilState(toDoState);
+  const [todos, setTodos] = useRecoilState(toDoState);
   const { register, setValue, handleSubmit } = useForm<IForm>();
   const onValid = ({ toDo }: IForm) => {
     const newTodo = {
@@ -98,16 +109,25 @@ function Board({ toDos, boardId }: IBoardProps) {
     });
     setValue("toDo", "");
   };
+  const onDelete = () => {
+    const todosCopy = { ...todos };
+    delete todosCopy[boardId];
+    setTodos(todosCopy);
+  };
   return (
     <Wrapper>
-      <Title>{boardId}</Title>
+      <Title>
+        {boardId}
+        <span onClick={onDelete}>
+          <FontAwesomeIcon icon={faTimesCircle} />
+        </span>
+      </Title>
       <Form onSubmit={handleSubmit(onValid)}>
         <input
           {...register("toDo", { required: true })}
           type="text"
           placeholder={`Add task on ${boardId}`}
         />
-        <button>Add</button>
       </Form>
       <Droppable droppableId={boardId}>
         {(magic, snapshot) => (

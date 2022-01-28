@@ -1,21 +1,15 @@
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DropResult,
-} from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { toDoState } from "./atoms";
 import Board from "./components/Board";
-import DraggableCard from "./components/DraggableCard";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import Trash from "./components/Trash";
+import BoardForm from "./components/BoardForm";
+import { Scrollbar } from "react-scrollbars-custom";
 
 const Wrapper = styled.div`
   display: flex;
-  max-width: 680px;
+  max-width: 80%;
   width: 100%;
   margin: 0 auto;
   justify-content: center;
@@ -26,30 +20,10 @@ const Wrapper = styled.div`
 const Boards = styled.div`
   display: grid;
   width: 100%;
+  height: 80%;
+  overflow-y: auto;
   gap: 10px;
   grid-template-columns: repeat(3, 1fr);
-`;
-
-const Footer = styled.div`
-  font-size: 50px;
-  color: black;
-`;
-
-interface IAreaProps {
-  isDraggingFromThis: boolean;
-  isDraggingOver: boolean;
-}
-
-const Area = styled.div<IAreaProps>`
-  background-color: ${(props) =>
-    props.isDraggingOver
-      ? "#dfe6e9"
-      : props.isDraggingFromThis
-      ? "#b2bec3"
-      : "transparent"};
-  flex-grow: 1;
-  transition: background-color 0.3s ease-in-out;
-  padding: 20px;
 `;
 
 function App() {
@@ -97,16 +71,21 @@ function App() {
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Wrapper>
-        <Boards>
-          {Object.keys(toDos).map((boardId) => (
-            <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
-          ))}
-        </Boards>
-      </Wrapper>
-      <Trash />
-    </DragDropContext>
+    <>
+      <BoardForm />
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Wrapper>
+          <Scrollbar style={{ width: "100%", height: "80%" }}>
+            <Boards>
+              {Object.keys(toDos).map((boardId) => (
+                <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
+              ))}
+            </Boards>
+          </Scrollbar>
+        </Wrapper>
+        <Trash />
+      </DragDropContext>
+    </>
   );
 }
 
