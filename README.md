@@ -2,6 +2,8 @@
 
 This project is a kanban app that enables users to add/remove lists on a webpage with drag & drop feature.
 
+App Link: https://hoon0661.github.io/kanban-app/
+
 #### Technology Used:
 
 - React
